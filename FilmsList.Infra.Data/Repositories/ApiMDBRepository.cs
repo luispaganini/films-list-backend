@@ -25,7 +25,11 @@ namespace FilmsList.Infra.Data
             var apiResult = await _apiMdbMovies.ExecuteAsync($"?s={name}", RestSharp.Method.Get);
             if (apiResult.IsSuccessful)
             {
-                apiResultList = JsonConvert.DeserializeObject<IEnumerable<Movie>>(apiResult.Content);
+                var test = JsonConvert.DeserializeObject<List<object>>(apiResult.Content);
+                //apiResultList = JsonConvert.DeserializeObject<IEnumerable<Movie>>(apiResult.Content);
+                foreach (var test1 in test) {
+                    System.Console.WriteLine(test1);
+                }
             }
                 
             return apiResultList;

@@ -1,15 +1,18 @@
 using AutoMapper;
 using FilmsList.Application.Handlers;
+using FilmsList.Infra.Data.Repositories;
 
 namespace FilmsList.Application.Services
 {
     public class MovieService : IMovieService
     {
-        private readonly Mapper _mapper;
+        private readonly IMapper _mapper;
+        private readonly IApiMDBRepository _apiMdbRepository;
 
-        public MovieService(Mapper mapper)
+        public MovieService(IMapper mapper, IApiMDBRepository apiMdbRepository)
         {
             _mapper = mapper;
+            _apiMdbRepository = apiMdbRepository;
         }
 
         public async Task Add(MovieDTO movieDTO)
@@ -22,9 +25,10 @@ namespace FilmsList.Application.Services
             throw new NotImplementedException();
         }
 
-        public async Task<List<MovieDTO>> GetMoviesByName(string name)
+        public async Task<IEnumerable<MovieDTO>> GetMoviesByName(string name)
         {
-            throw new NotImplementedException();
+            var result = await _apiMdbRepository.GetByNameAsync(name);
+            return _mapper.Map<IEnumerable<MovieDTO>>(result);
         }
 
         public async Task Remove(int id)

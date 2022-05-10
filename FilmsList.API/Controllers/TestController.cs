@@ -1,3 +1,4 @@
+using FilmsList.Application.Handlers;
 using FilmsList.Application.Services;
 using FilmsList.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -8,17 +9,17 @@ namespace FilmsList.API.Controllers
     [ApiController]
     public class TestController : ControllerBase
     {
-        private readonly IApiMDBMovies _apiMdbMovies;
+        private readonly IMovieService _movieService;
 
-        public TestController(IApiMDBMovies apiMdbMovies)
+        public TestController(IMovieService movieService)
         {
-            _apiMdbMovies = apiMdbMovies;
+            _movieService = movieService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(string name)
         {
-            
+            var result = await _movieService.GetMoviesByName(name);
             return Ok();
         }
     }
