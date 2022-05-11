@@ -5,8 +5,6 @@ namespace FilmsList.Application.Handlers
 {
     public class MovieDTO
     {
-        public int Id { get; set; }
-
         [Required(ErrorMessage = "The title is required")]
         [MinLength(3)]
         [DisplayName("Title")]

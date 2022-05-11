@@ -17,15 +17,21 @@ namespace FilmsList.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetMoviesByName(string name)
         {
-            var result = await _movieService.GetMoviesByName(name);
-            return Ok(result);
+            var movies = await _movieService.GetMoviesByName(name);
+            if (movies.ToList().Count == 0 || movies == null)
+                return NotFound("Movies not found");
+  
+            return Ok(movies);
         }
 
         [HttpGet("{imdbId}")]
         public async Task<IActionResult> GetMovieById(string imdbId)
         {
-            var result = await _movieService.GetMovieById(imdbId);
-            return Ok(result);
+            var movie = await _movieService.GetMovieById(imdbId);
+            if (movie.ImdbId == null)
+                return NotFound("Movie not found");
+
+            return Ok(movie);
         }
     }
 }
