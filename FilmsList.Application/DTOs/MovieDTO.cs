@@ -22,8 +22,8 @@ namespace FilmsList.Application.Handlers
 
         [Required(ErrorMessage = "The rating movie is required")]
         [Range(0, 100)]
-        [DisplayName("Price")]
-        public int RatingMovie { get; set; }
+        [DisplayName("Score")]
+        public int Score { get; set; }
 
         [Required(ErrorMessage = "The trailer is required")]
         [DisplayName("Trailer")]

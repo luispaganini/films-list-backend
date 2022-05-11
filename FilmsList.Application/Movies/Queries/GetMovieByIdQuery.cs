@@ -1,12 +1,15 @@
+using FilmsList.Domain.Entities;
+using MediatR;
+
 namespace FilmsList.Application.Movies.Queries
 {
-    public class GetMovieByIdQuery : GetMoviesQuery
+    public class GetMovieByIdQuery : IRequest<Movie>
     {
-        public int Id { get; set; }
+        public string ImdbId { get; set; }
         
-        public GetMovieByIdQuery(int id)
+        public GetMovieByIdQuery(string imdbId)
         {
-            Id = id;
+            ImdbId = imdbId;
         }
     }
 }

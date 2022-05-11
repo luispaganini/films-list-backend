@@ -10,8 +10,7 @@ namespace FilmsList.Infra.Data.EntitiesConfiguration
         {
             builder.HasKey(movie => movie.Id);
             builder.Property(movie => movie.ImdbId).HasMaxLength(20).IsRequired();
-            builder.Property(movie => movie.RatingMovie).HasMaxLength(3).IsRequired();
-            builder.Property(movie => movie.PriorityLevel).HasMaxLength(1).IsRequired();
+            builder.Property(movie => movie.Score).HasMaxLength(3).IsRequired();
         }
     }
 }

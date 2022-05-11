@@ -16,19 +16,31 @@ namespace FilmsList.Infra.Data
         public async Task<Movie> GetById(string imdbId)
         {
             var apiResult = await _apiMdbMovies.ExecuteAsync($"?i={imdbId}", RestSharp.Method.Get);
-            throw new NotImplementedException();
+            if (apiResult.IsSuccessful)
+            {
+                return JsonConvert.DeserializeObject<Movie>(apiResult.Content);
+            }
+            return null;
         }
 
-        public async Task<IEnumerable<Movie>> GetByNameAsync(string name)
+        public async Task<IEnumerable<Movie>> GetByName(string name)
         {
-            IEnumerable<Movie> apiResultList = new List<Movie>();
+            List<Movie> apiResultList = new List<Movie>();
             var apiResult = await _apiMdbMovies.ExecuteAsync($"?s={name}", RestSharp.Method.Get);
             if (apiResult.IsSuccessful)
             {
-                var test = JsonConvert.DeserializeObject<List<object>>(apiResult.Content);
-                //apiResultList = JsonConvert.DeserializeObject<IEnumerable<Movie>>(apiResult.Content);
-                foreach (var test1 in test) {
-                    System.Console.WriteLine(test1);
+                var apiContent = JsonConvert.DeserializeObject<SearchByTitle>(apiResult.Content);
+                Thread.Sleep(1000);
+                int cont = 0;
+                foreach (var result in apiContent.Search) {
+                    var movie = await GetById(result.ImdbId);
+                    Thread.Sleep(1000);
+                    if (movie != null)
+                        apiResultList.Add(movie);
+                    
+                    cont++;
+
+                    if (cont == 3) break;
                 }
             }
                 
