@@ -1,5 +1,6 @@
 using AutoMapper;
 using FilmsList.Application.Handlers;
+using FilmsList.Application.Movies.Commands;
 using FilmsList.Application.Movies.Queries;
 using FilmsList.Infra.Data.Repositories;
 using MediatR;
@@ -19,6 +20,24 @@ namespace FilmsList.Application.Services
         }
 
         public async Task Add(MovieDTO movieDTO)
+        {
+            var movieCreateCommand = _mapper.Map<MovieCreateCommand>(movieDTO);
+            await _mediator.Send(movieCreateCommand);
+        }
+
+        public async Task<IEnumerable<MovieDTO>> GetAllAdded()
+        {
+            var moviesQuery = new GetAllMoviesAdded();
+
+            if (moviesQuery == null)
+                throw new Exception($"Entity could not be loaded");
+
+            var result = await _mediator.Send(moviesQuery);
+
+            return _mapper.Map<IEnumerable<MovieDTO>>(result);
+        }
+
+        public Task<IEnumerable<MovieDTO>> GetByPriority()
         {
             throw new NotImplementedException();
         }
@@ -44,9 +63,14 @@ namespace FilmsList.Application.Services
             return _mapper.Map<IEnumerable<MovieDTO>>(result);
         }
 
-        public async Task Remove(int id)
+        public async Task Remove(string imdbId)
         {
-            throw new NotImplementedException();
+            var movieRemoveCommand = new MovieRemoveCommand(imdbId);
+
+            if (movieRemoveCommand == null)
+                throw new Exception($"Entity could not be loaded");
+
+            await _mediator.Send(movieRemoveCommand);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace FilmsList.Domain.Entities
         public string Trailer { get; private set; }
         public string Poster { get; private set; }
         public string Backdrop { get; private set; }
-        public int PriorityLevel { get; private set; } = 0;
+        public int PriorityLevel { get; private set; } = 1;
 
         public Movie(
             string title, 

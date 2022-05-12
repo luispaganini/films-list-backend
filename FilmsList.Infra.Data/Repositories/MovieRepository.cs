@@ -9,6 +9,11 @@ namespace FilmsList.Infra.Data
     {
         private ApplicationDbContext _movieContext;
 
+        public MovieRepository(ApplicationDbContext movieContext)
+        {
+            _movieContext = movieContext;
+        }
+ 
         public async Task<Movie> CreateAsync(Movie movie)
         {
             _movieContext.Add(movie);
