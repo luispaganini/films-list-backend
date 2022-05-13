@@ -2,7 +2,6 @@ using AutoMapper;
 using FilmsList.Application.Handlers;
 using FilmsList.Application.Movies.Commands;
 using FilmsList.Application.Movies.Queries;
-using FilmsList.Infra.Data.Repositories;
 using MediatR;
 
 namespace FilmsList.Application.Services
@@ -11,7 +10,6 @@ namespace FilmsList.Application.Services
     {
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
-
 
         public MovieService(IMapper mapper, IMediator mediator)
         {
@@ -27,7 +25,7 @@ namespace FilmsList.Application.Services
 
         public async Task<IEnumerable<MovieDTO>> GetAllAdded()
         {
-            var moviesQuery = new GetAllMoviesAdded();
+            var moviesQuery = new GetAllMoviesAddedQuery();
 
             if (moviesQuery == null)
                 throw new Exception($"Entity could not be loaded");
@@ -37,14 +35,32 @@ namespace FilmsList.Application.Services
             return _mapper.Map<IEnumerable<MovieDTO>>(result);
         }
 
-        public Task<IEnumerable<MovieDTO>> GetByPriority()
+        public async Task<IEnumerable<MovieDTO>> GetByPriority(int priorityLevel)
         {
-            throw new NotImplementedException();
+            var moviesByPriority = new GetMoviesByPriorityQuery(priorityLevel);
+
+            if (moviesByPriority == null)
+                throw new Exception($"Entity could not be loaded");
+
+            var result = await _mediator.Send(moviesByPriority);
+
+            return _mapper.Map<IEnumerable<MovieDTO>>(result);
         }
 
-        public async Task<MovieDTO> GetMovieById(string imdbId)
+        public async Task<MovieDTO> GetMovieInApiByImdbId(string imdbId)
         {
-            var movieByIdQuery = new GetMovieByIdQuery(imdbId);
+            var movieByIdQuery = new GetMovieInApiByImdbIdQuery(imdbId);
+            if (movieByIdQuery == null)
+                throw new Exception($"Entity could not be loaded");
+
+            var result = await _mediator.Send(movieByIdQuery);
+
+            return _mapper.Map<MovieDTO>(result);
+        }
+
+        public async Task<MovieDTO> GetMovieInListByImdbId(string imdbId)
+        {
+            var movieByIdQuery = new GetMovieInListByImdbIdQuery(imdbId);
             if (movieByIdQuery == null)
                 throw new Exception($"Entity could not be loaded");
 

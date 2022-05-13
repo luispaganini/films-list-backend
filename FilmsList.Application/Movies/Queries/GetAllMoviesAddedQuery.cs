@@ -3,7 +3,7 @@ using MediatR;
 
 namespace FilmsList.Application.Movies.Queries
 {
-    public class GetAllMoviesAdded : IRequest<IEnumerable<Movie>>
+    public class GetAllMoviesAddedQuery : IRequest<IEnumerable<Movie>>
     {
         
     }

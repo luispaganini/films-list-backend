@@ -6,7 +6,6 @@ namespace FilmsList.Application.Handlers
 {
     public class MovieDTO
     {
-        [JsonIgnore]
         public int Id { get; set; }
 
         [Required(ErrorMessage = "The title is required")]

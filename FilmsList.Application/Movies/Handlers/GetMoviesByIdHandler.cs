@@ -5,16 +5,16 @@ using MediatR;
 
 namespace FilmsList.Application.Movies.Handlers
 {
-    public class GetMoviesByIdHandler : IRequestHandler<GetMovieByIdQuery, Movie>
+    public class GetMovieInApiByImdbIdHandler : IRequestHandler<GetMovieInApiByImdbIdQuery, Movie>
     {
         private readonly IApiMDBRepository _apiMdbRepository;
 
-        public GetMoviesByIdHandler(IApiMDBRepository apiMdbRepository)
+        public GetMovieInApiByImdbIdHandler(IApiMDBRepository apiMdbRepository)
         {
             _apiMdbRepository = apiMdbRepository;
         }
 
-        public async Task<Movie> Handle(GetMovieByIdQuery request, CancellationToken cancellationToken)
+        public async Task<Movie> Handle(GetMovieInApiByImdbIdQuery request, CancellationToken cancellationToken)
         {
             var movie = await _apiMdbRepository.GetById(request.ImdbId);
 

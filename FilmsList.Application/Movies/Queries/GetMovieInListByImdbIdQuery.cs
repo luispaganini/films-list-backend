@@ -3,11 +3,11 @@ using MediatR;
 
 namespace FilmsList.Application.Movies.Queries
 {
-    public class GetMovieByIdQuery : IRequest<Movie>
+    public class GetMovieInListByImdbIdQuery : IRequest<Movie>
     {
         public string ImdbId { get; set; }
         
-        public GetMovieByIdQuery(string imdbId)
+        public GetMovieInListByImdbIdQuery(string imdbId)
         {
             ImdbId = imdbId;
         }

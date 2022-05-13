@@ -5,7 +5,7 @@ using MediatR;
 
 namespace FilmsList.Application.Movies.Handlers
 {
-    public class GetAllMoviesAddedHandler : IRequestHandler<GetAllMoviesAdded, IEnumerable<Movie>>
+    public class GetAllMoviesAddedHandler : IRequestHandler<GetAllMoviesAddedQuery, IEnumerable<Movie>>
     {
         private readonly IMovieRepository _movieRepository;
 
@@ -14,7 +14,7 @@ namespace FilmsList.Application.Movies.Handlers
             _movieRepository = movieRepository;
         }
 
-        public async Task<IEnumerable<Movie>> Handle(GetAllMoviesAdded request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Movie>> Handle(GetAllMoviesAddedQuery request, CancellationToken cancellationToken)
         {
             return await _movieRepository.GetMoviesAsync();
         }

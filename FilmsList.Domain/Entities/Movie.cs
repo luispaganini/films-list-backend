@@ -11,7 +11,7 @@ namespace FilmsList.Domain.Entities
         public string Trailer { get; private set; }
         public string Poster { get; private set; }
         public string Backdrop { get; private set; }
-        public int PriorityLevel { get; private set; } = 1;
+        public int? PriorityLevel { get; private set; } = 1;
 
         public Movie(
             string title, 
@@ -21,7 +21,7 @@ namespace FilmsList.Domain.Entities
             string trailer, 
             string poster, 
             string backdrop, 
-            int priorityLevel)
+            int? priorityLevel)
         {
             Title = title;
             Description = description;
@@ -31,6 +31,8 @@ namespace FilmsList.Domain.Entities
             Poster = poster;
             Backdrop = backdrop;
             PriorityLevel = priorityLevel;
+            ValidateDomain(title, description, imdbId, score, trailer, poster, backdrop, priorityLevel);
+
 
         }
         public void Update(
@@ -46,6 +48,19 @@ namespace FilmsList.Domain.Entities
             ValidateDomain(title, description, imdbId, score, trailer, poster, backdrop, priorityLevel);
         }
 
+        public bool ValidateMovie()
+        {
+            try 
+            {
+                ValidateDomain(Title, Description, ImdbId, Score, Trailer, Poster, Backdrop, PriorityLevel);
+            } 
+            catch(DomainExceptionValidation) 
+            {
+                return false;
+            }
+            return true;
+        }
+
         private void ValidateDomain(
             string title, 
             string description, 
@@ -54,7 +69,7 @@ namespace FilmsList.Domain.Entities
             string trailer, 
             string poster, 
             string backdrop, 
-            int priorityLevel)
+            int? priorityLevel)
         {
             DomainExceptionValidation.When(string.IsNullOrEmpty(title),
                 "Invalid title. Title is required");
@@ -62,7 +77,7 @@ namespace FilmsList.Domain.Entities
                 "Invalid description. Description is required");
             DomainExceptionValidation.When(string.IsNullOrEmpty(imdbId),
                 "Invalid IMDBid. IMDBid is required");
-            DomainExceptionValidation.When(Score < 0 || Score > 100,
+            DomainExceptionValidation.When(score < 0 || score > 100,
                 "Invalid rating movie value. Rating Movie is between 0 and 100");
             DomainExceptionValidation.When(string.IsNullOrEmpty(trailer),
                 "Invalid trailer. Trailer is required");
@@ -82,6 +97,5 @@ namespace FilmsList.Domain.Entities
             Backdrop = backdrop;
             PriorityLevel = priorityLevel;
         }
-
     }
 }

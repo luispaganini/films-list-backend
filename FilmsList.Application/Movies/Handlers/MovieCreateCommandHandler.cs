@@ -29,11 +29,7 @@ namespace FilmsList.Application.Movies.Handlers
             if (movie == null)
                 throw new ApplicationException($"Error creating entity.");
             else
-            {
                 return await _movieRepository.CreateAsync(movie);
-            }
-                
-            
         }
     }
 }

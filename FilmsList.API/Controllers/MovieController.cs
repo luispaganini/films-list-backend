@@ -15,8 +15,7 @@ namespace FilmsList.API.Controllers
         }
 
         [HttpGet()]
-        [Route("nome")]
-        
+        [Route("name")]
         public async Task<IActionResult> GetMoviesByName(string name)
         {
             var movies = await _movieService.GetMoviesByName(name);
@@ -28,9 +27,9 @@ namespace FilmsList.API.Controllers
         }
 
         [HttpGet("{imdbId}", Name = "GetMovieById")]
-        public async Task<IActionResult> GetMovieById(string imdbId)
+        public async Task<IActionResult> GetMovieByImdbId(string imdbId)
         {
-            var movie = await _movieService.GetMovieById(imdbId);
+            var movie = await _movieService.GetMovieInApiByImdbId(imdbId);
             if (movie.ImdbId == null)
                 return NotFound("Movie not found");
 
@@ -49,14 +48,31 @@ namespace FilmsList.API.Controllers
             return Ok(movies);
         }
 
+        [HttpGet]
+        [Route("/api/movies/priority/{priorityLevel}")]
+        public async Task<IActionResult> GetMoviesByPriority(int priorityLevel)
+        {
+            var movies = await _movieService.GetByPriority(priorityLevel);
+
+            if (movies == null)
+                return NotFound("Movies not found");
+
+            return Ok(movies);
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddMovie([FromBody] MovieDTO movieDTO)
         {
             if (movieDTO == null)
                 return BadRequest("Invalid data");
             
-            await _movieService.Add(movieDTO);
-
+            try {
+                await _movieService.Add(movieDTO);
+            } 
+            catch (Exception e) 
+            {
+                return BadRequest(e.Message);
+            }
 
             return new CreatedAtRouteResult("GetMovieById", movieDTO, movieDTO);
         }
@@ -64,9 +80,14 @@ namespace FilmsList.API.Controllers
         [HttpDelete("{imdbId}")]
         public async Task<IActionResult> DeleteMovieFromList(string imdbId)
         {
-            // var productDTO = await _movieService.Get
-            return Ok();
-        }
+            var movieDTO = await _movieService.GetMovieInListByImdbId(imdbId);
+            
+            if (movieDTO == null)
+                return NotFound("Movie not found");
 
+            await _movieService.Remove(imdbId);
+
+            return Ok(movieDTO);
+        }
     }
 }

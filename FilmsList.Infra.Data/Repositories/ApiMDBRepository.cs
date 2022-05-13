@@ -18,7 +18,9 @@ namespace FilmsList.Infra.Data
             var apiResult = await _apiMdbMovies.ExecuteAsync($"?i={imdbId}", RestSharp.Method.Get);
             if (apiResult.IsSuccessful)
             {
-                return JsonConvert.DeserializeObject<Movie>(apiResult.Content);
+                var movie = JsonConvert.DeserializeObject<Movie>(apiResult.Content);
+                if (movie.ValidateMovie())
+                    return movie;
             }
             return null;
         }
@@ -34,13 +36,13 @@ namespace FilmsList.Infra.Data
                 int cont = 0;
                 foreach (var result in apiContent.Search) {
                     var movie = await GetById(result.ImdbId);
-                    Thread.Sleep(1000);
-                    if (movie != null)
+                    if (movie.ValidateMovie())
                         apiResultList.Add(movie);
                     
                     cont++;
 
                     if (cont == 3) break;
+                    Thread.Sleep(1000);
                 }
             }
                 

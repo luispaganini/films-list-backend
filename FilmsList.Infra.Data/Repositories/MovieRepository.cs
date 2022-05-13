@@ -22,10 +22,20 @@ namespace FilmsList.Infra.Data
             return movie;
         }
 
-        public async Task<Movie> GetMovieByIdAsync(int id)
+        public async Task<Movie> GetMovieByImdbIdAsync(string imdbId)
         {
-            var movie = await _movieContext.Movies.SingleOrDefaultAsync(movie => movie.Id == id);
+            var movie = await _movieContext.Movies.SingleOrDefaultAsync(movie => movie.ImdbId == imdbId);
             return movie;
+        }
+
+        public async Task<IEnumerable<Movie>> GetByPriorityAsync(int priorityLevel) 
+        {
+            if (priorityLevel > 0 && priorityLevel < 4)
+                return await _movieContext.Movies
+                    .Where(movie => movie.PriorityLevel == priorityLevel).ToListAsync();
+            else
+                return await _movieContext.Movies
+                    .OrderBy(movie => movie.PriorityLevel).ToListAsync();
         }
 
         public async Task<IEnumerable<Movie>> GetMoviesAsync()
