@@ -1,4 +1,5 @@
 using FilmsList.Application.Handlers;
+using FilmsList.Domain.Validation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FilmsList.API.Controllers
@@ -14,6 +15,12 @@ namespace FilmsList.API.Controllers
             _movieService = movieService;
         }
 
+
+        /// <summary>
+        /// Get 3 movies from API MDB List
+        /// </summary>
+        /// <param name="name">Movie name</param>
+        /// <returns>List with 3 valid movies</returns>
         [HttpGet()]
         [Route("name")]
         public async Task<IActionResult> GetMoviesByName(string name)
@@ -26,16 +33,37 @@ namespace FilmsList.API.Controllers
             return Ok(movies);
         }
 
+        /// <summary>
+        /// Get movie by imdbId from API MDB List
+        /// </summary>
+        /// <param name="imdbId">Movie Identificator</param>
+        /// <returns>Valid movie</returns>
         [HttpGet("{imdbId}", Name = "GetMovieById")]
         public async Task<IActionResult> GetMovieByImdbId(string imdbId)
         {
-            var movie = await _movieService.GetMovieInApiByImdbId(imdbId);
-            if (movie.ImdbId == null)
-                return NotFound("Movie not found");
+            MovieDTO movie = null; 
+            try {
+                try {
+                    movie = await _movieService.GetMovieInApiByImdbId(imdbId);
+                }
+                catch(MovieNotFoundExceptionValidation e)
+                {
+                    return NotFound(e.Message);
+                }
+            }
+            catch(ApplicationException e)
+            {
+                return BadRequest(e.Message);
+            }
 
             return Ok(movie);
         }
 
+
+        /// <summary>
+        /// Get all movies from your favorite list
+        /// </summary>
+        /// <returns>Return list with all favorite movies</returns>
         [HttpGet]
         [Route("/api/movies")]
         public async Task<IActionResult> GetAllAdded() 
@@ -48,6 +76,16 @@ namespace FilmsList.API.Controllers
             return Ok(movies);
         }
 
+        /// <summary>
+        /// Get All movies by priority level from your favorite list
+        /// </summary>
+        /// <param name="priorityLevel">
+        /// Priority level:
+        ///     1 - Low | 
+        ///     2 - Medium |
+        ///     3 - High
+        /// </param>
+        /// <returns>Returns all movies according priority level</returns>
         [HttpGet]
         [Route("/api/movies/priority/{priorityLevel}")]
         public async Task<IActionResult> GetMoviesByPriority(int priorityLevel)
@@ -60,6 +98,12 @@ namespace FilmsList.API.Controllers
             return Ok(movies);
         }
 
+
+        /// <summary>
+        /// Add Movie to your favorite list
+        /// </summary>
+        /// <param name="movieDTO">JSON with Movie attributes</param>
+        /// <returns>Status 201 - Created</returns>
         [HttpPost]
         public async Task<IActionResult> AddMovie([FromBody] MovieDTO movieDTO)
         {
@@ -76,6 +120,11 @@ namespace FilmsList.API.Controllers
 
             return new CreatedAtRouteResult("GetMovieById", movieDTO, movieDTO);
         }
+        /// <summary>
+        /// Delete movie from favorite list
+        /// </summary>
+        /// <param name="imdbId">Identificator movie</param>
+        /// <returns>Status 200 - OK</returns>
 
         [HttpDelete("{imdbId}")]
         public async Task<IActionResult> DeleteMovieFromList(string imdbId)

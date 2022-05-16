@@ -1,5 +1,6 @@
 using FilmsList.Domain.Entities;
 using FilmsList.Domain.Interfaces.Services;
+using FilmsList.Domain.Validation;
 using FilmsList.Infra.Data.Repositories;
 using Newtonsoft.Json;
 
@@ -18,9 +19,18 @@ namespace FilmsList.Infra.Data
             var apiResult = await _apiMdbMovies.ExecuteAsync($"?i={imdbId}", RestSharp.Method.Get);
             if (apiResult.IsSuccessful)
             {
-                var movie = JsonConvert.DeserializeObject<Movie>(apiResult.Content);
-                if (movie.ValidateMovie())
-                    return movie;
+                try {
+                    var movie = JsonConvert.DeserializeObject<Movie>(apiResult.Content);
+                    if (!movie.Response)
+                        throw new MovieNotFoundExceptionValidation("Movie not found");
+                        
+                    if (movie.ValidateMovie() && movie != null)
+                        return movie;
+                }
+                catch(DomainExceptionValidation)
+                {
+                    throw;
+                }
             }
             return null;
         }
@@ -35,10 +45,17 @@ namespace FilmsList.Infra.Data
                 Thread.Sleep(1000);
                 int cont = 0;
                 foreach (var result in apiContent.Search) {
-                    var movie = await GetById(result.ImdbId);
-                    if (movie.ValidateMovie())
-                        apiResultList.Add(movie);
-                    
+                    try {
+                        var movie = await GetById(result.ImdbId);
+                        if (movie != null)
+                            apiResultList.Add(movie);
+
+                    }
+                    catch(DomainExceptionValidation e) 
+                    {
+                        System.Console.WriteLine($"Item [{cont + 1}] - {e.Message}");
+                    }
+
                     cont++;
 
                     if (cont == 3) break;

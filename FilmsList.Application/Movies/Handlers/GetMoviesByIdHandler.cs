@@ -1,5 +1,6 @@
 using FilmsList.Application.Movies.Queries;
 using FilmsList.Domain.Entities;
+using FilmsList.Domain.Validation;
 using FilmsList.Infra.Data.Repositories;
 using MediatR;
 
@@ -16,8 +17,15 @@ namespace FilmsList.Application.Movies.Handlers
 
         public async Task<Movie> Handle(GetMovieInApiByImdbIdQuery request, CancellationToken cancellationToken)
         {
-            var movie = await _apiMdbRepository.GetById(request.ImdbId);
-
+            Movie movie = null;
+            try {
+                movie = await _apiMdbRepository.GetById(request.ImdbId);
+            }
+            catch(DomainExceptionValidation e)
+            {
+                throw new ApplicationException(e.Message);
+            }
+            
             if (movie == null)
                 throw new ApplicationException($"Entity could not be found.");
             

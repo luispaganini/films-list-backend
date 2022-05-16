@@ -8,7 +8,7 @@ namespace FilmsList.Domain.Validation
         public static void When(bool hasError, string error)
         {
             if (hasError)
-                throw new DomainExceptionValidation(error);
+                 throw new DomainExceptionValidation(error);
         }
     }
 }
