@@ -102,6 +102,18 @@ namespace FilmsList.API.Controllers
         /// <summary>
         /// Add Movie to your favorite list
         /// </summary>
+        /// <remark>
+        /// {
+        ///    "title": "Jaws",
+        ///    "description": "When an insatiable great white shark terrorizes the townspeople of Amity Island, the police chief, an oceanographer and a grizzled shark hunter seek to destroy the blood-thirsty beast.",
+        ///    "imdbId": "tt0073195",
+        ///    "score": 5,
+        ///    "trailer": "http://youtube.com/watch?v=U1fu_sA7XhE",
+        ///    "poster": "https://image.tmdb.org/t/p/original/s2xcqSFfT6F7ZXHxowjxfG0yisT.jpg",
+        ///    "backdrop": "https://image.tmdb.org/t/p/w1920_and_h800_multi_faces//3nYlM34QhzdtAvWRV5bN4nLtnTc.jpg",
+        ///    "priorityLevel": 3
+        ///  }
+        /// </remark>
         /// <param name="movieDTO">JSON with Movie attributes</param>
         /// <returns>Status 201 - Created</returns>
         [HttpPost]
