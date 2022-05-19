@@ -1,11 +1,13 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using AutoMapper.Configuration.Annotations;
 using Newtonsoft.Json;
 
 namespace FilmsList.Application.Handlers
 {
     public class MovieDTO
     {
+        [Ignore]
         public int Id { get; set; }
 
         [Required(ErrorMessage = "The title is required")]

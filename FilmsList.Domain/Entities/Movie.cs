@@ -11,7 +11,7 @@ namespace FilmsList.Domain.Entities
         public string Trailer { get; private set; }
         public string Poster { get; private set; }
         public string Backdrop { get; private set; }
-        public bool Response { get; private set; } 
+        public bool Response { get; private set; } = true;
         public int? PriorityLevel { get; private set; } = 1;
 
         public Movie(
@@ -74,8 +74,8 @@ namespace FilmsList.Domain.Entities
             string backdrop,
             int? priorityLevel)
         {
-            MovieNotFoundExceptionValidation.When(!Response, 
-                "Movie not found");
+            // MovieNotFoundExceptionValidation.When(!Response, 
+            //     "Movie not found");
             DomainExceptionValidation.When(string.IsNullOrEmpty(title),
                 "Invalid title. Title is required");
             DomainExceptionValidation.When(string.IsNullOrEmpty(description),

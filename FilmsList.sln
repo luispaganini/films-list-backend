@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilmsList.API", "FilmsList.API\FilmsList.API.csproj", "{E574B747-E064-4840-8F36-828392888A4A}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilmsList.Domain", "FilmsList.Domain\FilmsList.Domain.csproj", "{C85E00D8-9C7A-4FDC-A080-3011B999EEF2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilmsList.Application", "FilmsList.Application\FilmsList.Application.csproj", "{33F2B50B-5342-4BB2-AEE1-2BE5A49218EA}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilmsList.API", "FilmsList.API\FilmsList.API.csproj", "{E574B747-E064-4840-8F36-828392888A4A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilmsList.Infra.Data", "FilmsList.Infra.Data\FilmsList.Infra.Data.csproj", "{BE30EC62-0E2A-48A2-B7FF-2D320EC4C868}"
 EndProject

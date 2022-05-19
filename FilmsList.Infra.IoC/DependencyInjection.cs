@@ -1,6 +1,7 @@
 using FilmsList.Application.Handlers;
 using FilmsList.Application.Mappings;
 using FilmsList.Application.Services;
+using FilmsList.Domain.Account;
 using FilmsList.Domain.Interfaces;
 using FilmsList.Domain.Interfaces.Services;
 using FilmsList.Infra.Data;
@@ -15,7 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace FilmsList.Infra.IoC
 {
-    public static class DependecyInjection
+    public static class DependencyInjection
     {
         public static IServiceCollection AddInfrastructure(
             this IServiceCollection services,
@@ -33,9 +34,10 @@ namespace FilmsList.Infra.IoC
             services.AddTransient<IApiMDBRepository, ApiMDBRespository>();
             services.AddTransient<IApiMDBMovies, ApiMDBMovies>();
             services.AddTransient<IMovieService, MovieService>();
+            services.AddTransient<IAuthenticate, AuthenticateService>();
+
 
             services.AddAutoMapper(typeof(DomainToDTOMappingProfile));
-
 
             var myHandlers = AppDomain.CurrentDomain.Load("FilmsList.Application");
             services.AddMediatR(myHandlers);

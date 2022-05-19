@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/d2bd3ac2-6985-4e57-b62c-51a5044bef8c/resourceGroups/films-list/providers/Microsoft.Web/sites/films-list",
+    "appService.deploySubpath": "publish"
+}
