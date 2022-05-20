@@ -22,7 +22,6 @@ namespace FilmsList.Domain.Entities
             string trailer, 
             string poster, 
             string backdrop,
-            bool response, 
             int? priorityLevel)
         {
             Title = title;
@@ -32,7 +31,6 @@ namespace FilmsList.Domain.Entities
             Trailer = trailer;
             Poster = poster;
             Backdrop = backdrop;
-            Response = response;
             PriorityLevel = priorityLevel;
             ValidateDomain(title, description, imdbId, score, trailer, poster, backdrop, priorityLevel);
 
@@ -74,8 +72,8 @@ namespace FilmsList.Domain.Entities
             string backdrop,
             int? priorityLevel)
         {
-            // MovieNotFoundExceptionValidation.When(!Response, 
-            //     "Movie not found");
+            MovieNotFoundExceptionValidation.When(!Response, 
+                "Movie not found");
             DomainExceptionValidation.When(string.IsNullOrEmpty(title),
                 "Invalid title. Title is required");
             DomainExceptionValidation.When(string.IsNullOrEmpty(description),

@@ -1,12 +1,15 @@
+using System.Security.Claims;
 using FilmsList.Application.DTOs;
 using FilmsList.Application.Handlers;
 using FilmsList.Domain.Validation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FilmsList.API.Controllers
 {
     [Route("api/movie")]
     [ApiController]
+    [Authorize]
     public class MovieController : ControllerBase
     {
         private readonly IMovieService _movieService;
@@ -118,7 +121,6 @@ namespace FilmsList.API.Controllers
         [HttpPost]
         public async Task<IActionResult> AddMovie([FromBody] MovieDTO movieDTO)
         {
-
             var movie = await _movieService.GetMovieInListByImdbId(movieDTO.ImdbId);
             if (movie != null)
                 return BadRequest("This movie already exists");            
