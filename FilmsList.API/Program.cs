@@ -31,6 +31,7 @@ builder.Services.AddSwaggerGen(c => {
 });
 var app = builder.Build();
 
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -44,5 +45,10 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseExceptionHandler("/error");
+
+app.Map("/error", (HttpContext http) => {
+    return Results.Problem(title: "Internal Server Error", statusCode: 500);
+});
 
 app.Run();

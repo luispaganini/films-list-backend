@@ -2,9 +2,9 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
-namespace FilmsList.Application.Handlers
+namespace FilmsList.Application.DTOs
 {
-    public class MovieDTO
+    public class MovieApiDTO
     {
         [Required(ErrorMessage = "The imdbId is required")]
         [DisplayName("ImdbId")]
@@ -36,8 +36,8 @@ namespace FilmsList.Application.Handlers
         [DisplayName("Backdrop")]
         public string Backdrop { get; set; }
 
-        [Required(ErrorMessage = "The Priority Level is required")]
-        [DisplayName("Priority Level")]
-        public int PriorityLevel { get; set; }
+        [Required(ErrorMessage = "The response is required")]
+        [DisplayName("Response")]
+        public bool Response { get; set; }
     }
 }

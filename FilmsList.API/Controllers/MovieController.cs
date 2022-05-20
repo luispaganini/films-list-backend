@@ -1,3 +1,4 @@
+using FilmsList.Application.DTOs;
 using FilmsList.Application.Handlers;
 using FilmsList.Domain.Validation;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +15,6 @@ namespace FilmsList.API.Controllers
         {
             _movieService = movieService;
         }
-
 
         /// <summary>
         /// Get 3 movies from API MDB List
@@ -41,7 +41,7 @@ namespace FilmsList.API.Controllers
         [HttpGet("{imdbId}", Name = "GetMovieById")]
         public async Task<IActionResult> GetMovieByImdbId(string imdbId)
         {
-            MovieDTO movie = null; 
+            MovieApiDTO movie = null; 
             try {
                 try {
                     movie = await _movieService.GetMovieInApiByImdbId(imdbId);
@@ -98,7 +98,6 @@ namespace FilmsList.API.Controllers
             return Ok(movies);
         }
 
-
         /// <summary>
         /// Add Movie to your favorite list
         /// </summary>
@@ -119,19 +118,21 @@ namespace FilmsList.API.Controllers
         [HttpPost]
         public async Task<IActionResult> AddMovie([FromBody] MovieDTO movieDTO)
         {
-            if (movieDTO == null)
-                return BadRequest("Invalid data");
-            
+
+            var movie = await _movieService.GetMovieInListByImdbId(movieDTO.ImdbId);
+            if (movie != null)
+                return BadRequest("This movie already exists");            
+
             try {
                 await _movieService.Add(movieDTO);
+                return new CreatedAtRouteResult("GetMovieById", movieDTO, movieDTO);
             } 
-            catch (Exception e) 
+            catch (ApplicationException e) 
             {
                 return BadRequest(e.Message);
             }
-
-            return new CreatedAtRouteResult("GetMovieById", movieDTO, movieDTO);
         }
+
         /// <summary>
         /// Delete movie from favorite list
         /// </summary>

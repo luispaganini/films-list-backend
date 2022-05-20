@@ -1,3 +1,4 @@
+using FilmsList.Application.DTOs;
 using FilmsList.Domain.Entities;
 
 namespace FilmsList.Application.Handlers
@@ -6,8 +7,8 @@ namespace FilmsList.Application.Handlers
     {
         Task<IEnumerable<MovieDTO>> GetAllAdded();
         Task<IEnumerable<MovieDTO>> GetByPriority(int priorityLevel);
-        Task<IEnumerable<MovieDTO>> GetMoviesByName(string name);
-        Task<MovieDTO> GetMovieInApiByImdbId(string imdbId);
+        Task<IEnumerable<MovieApiDTO>> GetMoviesByName(string name);
+        Task<MovieApiDTO> GetMovieInApiByImdbId(string imdbId);
         Task<MovieDTO> GetMovieInListByImdbId(string imdbId);
         Task Add(MovieDTO movieDTO);
         Task Remove(string imdbId);

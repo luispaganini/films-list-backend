@@ -1,4 +1,5 @@
 using AutoMapper;
+using FilmsList.Application.DTOs;
 using FilmsList.Application.Handlers;
 using FilmsList.Application.Movies.Commands;
 using FilmsList.Application.Movies.Queries;
@@ -47,7 +48,7 @@ namespace FilmsList.Application.Services
             return _mapper.Map<IEnumerable<MovieDTO>>(result);
         }
 
-        public async Task<MovieDTO> GetMovieInApiByImdbId(string imdbId)
+        public async Task<MovieApiDTO> GetMovieInApiByImdbId(string imdbId)
         {
             var movieByIdQuery = new GetMovieInApiByImdbIdQuery(imdbId);
             if (movieByIdQuery == null)
@@ -55,7 +56,7 @@ namespace FilmsList.Application.Services
 
             var result = await _mediator.Send(movieByIdQuery);
 
-            return _mapper.Map<MovieDTO>(result);
+            return _mapper.Map<MovieApiDTO>(result);
         }
 
         public async Task<MovieDTO> GetMovieInListByImdbId(string imdbId)
@@ -64,19 +65,25 @@ namespace FilmsList.Application.Services
             if (movieByIdQuery == null)
                 throw new Exception($"Entity could not be loaded");
 
-            var result = await _mediator.Send(movieByIdQuery);
-
-            return _mapper.Map<MovieDTO>(result);
+            try
+            {
+                var result = await _mediator.Send(movieByIdQuery);
+                return _mapper.Map<MovieDTO>(result);
+            }
+            catch (ApplicationException)
+            {
+                return null;
+            }
         }
 
-        public async Task<IEnumerable<MovieDTO>> GetMoviesByName(string name)
+        public async Task<IEnumerable<MovieApiDTO>> GetMoviesByName(string name)
         {
             var moviesByNameQuery = new GetMoviesQuery(name);
             if (moviesByNameQuery == null)
                 throw new Exception($"Entity could not be loaded");
 
             var result = await _mediator.Send(moviesByNameQuery);
-            return _mapper.Map<IEnumerable<MovieDTO>>(result);
+            return _mapper.Map<IEnumerable<MovieApiDTO>>(result);
         }
 
         public async Task Remove(string imdbId)
