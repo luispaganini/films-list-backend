@@ -3,6 +3,8 @@ using System.Security.Claims;
 using System.Text;
 using FilmsList.API.Models;
 using FilmsList.Domain.Account;
+using FilmsList.Infra.Data.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -14,23 +16,27 @@ namespace FilmsList.API.Controllers
     {
         private readonly IAuthenticate _authentication;
         private readonly IConfiguration _configuration;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public TokenController(IAuthenticate authentication, IConfiguration configuration)
+        public TokenController(IAuthenticate authentication, IConfiguration configuration, UserManager<ApplicationUser> userManager)
         {
             _authentication = authentication ??
                 throw new ArgumentNullException(nameof(authentication));
             _configuration = configuration;
+            _userManager = userManager;
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<UserToken>> Login([FromBody] LoginModel userInfo)
         {
+            
+            var user = await _userManager.FindByEmailAsync(userInfo.Email);
             var result = await _authentication.Authenticate(
                 userInfo.Email, 
                 userInfo.Password);
             
             if (result)
-                return GenerateToken(userInfo);
+                return GenerateToken(userInfo, user.Id);
             else
             {
                 ModelState.AddModelError(string.Empty, "Invalid Login attempt.");
@@ -58,12 +64,13 @@ namespace FilmsList.API.Controllers
         }
 
 
-        private UserToken GenerateToken(LoginModel userInfo)
+        private UserToken GenerateToken(LoginModel userInfo, string userId)
         {
             // JTI = id do token
             var claims = new []
             {
-                new Claim("email", userInfo.Email),
+                new Claim(ClaimTypes.Email, userInfo.Email),
+                new Claim(ClaimTypes.NameIdentifier, userId),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
@@ -88,7 +95,8 @@ namespace FilmsList.API.Controllers
             return new UserToken()
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
-                Expiration = expiration
+                Expiration = expiration,
+                UserId = userId
             };
         }
     }

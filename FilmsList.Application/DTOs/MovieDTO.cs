@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+using AutoMapper.Configuration.Annotations;
 
 namespace FilmsList.Application.Handlers
 {
@@ -35,6 +36,9 @@ namespace FilmsList.Application.Handlers
         [Required(ErrorMessage = "The backdrop is required")]
         [DisplayName("Backdrop")]
         public string Backdrop { get; set; }
+
+        [JsonIgnore]
+        public string? UserId { get; set; }
 
         [Required(ErrorMessage = "The Priority Level is required")]
         [DisplayName("Priority Level")]

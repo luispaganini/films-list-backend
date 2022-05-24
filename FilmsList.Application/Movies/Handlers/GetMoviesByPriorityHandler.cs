@@ -16,7 +16,7 @@ namespace FilmsList.Application.Movies.Handlers
 
         public async Task<IEnumerable<Movie>> Handle(GetMoviesByPriorityQuery request, CancellationToken cancellationToken)
         {
-            return await _movieRepository.GetByPriorityAsync(request.PriorityLevel);
+            return await _movieRepository.GetByPriorityAsync(request.PriorityLevel, request.UserId);
         }
     }
 }

@@ -6,6 +6,6 @@ namespace FilmsList.API.Models
         
         public DateTime Expiration { get; set; }
         
-        
+        public string UserId { get; set; }
     }
 }

@@ -20,12 +20,13 @@ namespace FilmsList.Infra.Data
             if (apiResult.IsSuccessful)
             {
                 try {
-                    var movie = JsonConvert.DeserializeObject<Movie>(apiResult.Content);
-                    if (!movie.Response)
+                    ErrorMovie movie = JsonConvert.DeserializeObject<ErrorMovie>(apiResult.Content);
+                    if (movie.isInvalid())
                         throw new MovieNotFoundExceptionValidation("Movie not found");
-                        
-                    if (movie.ValidateMovie() && movie != null)
-                        return movie;
+                    
+                    Movie movieExistent = JsonConvert.DeserializeObject<Movie>(apiResult.Content);                    
+                    if (movieExistent.ValidateMovie() && movie != null)
+                        return movieExistent;
                 }
                 catch(DomainExceptionValidation)
                 {

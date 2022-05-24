@@ -35,9 +35,5 @@ namespace FilmsList.Application.DTOs
         [Required(ErrorMessage = "The backdrop is required")]
         [DisplayName("Backdrop")]
         public string Backdrop { get; set; }
-
-        [Required(ErrorMessage = "The response is required")]
-        [DisplayName("Response")]
-        public bool Response { get; set; }
     }
 }

@@ -1,6 +1,6 @@
-using System.Security.Claims;
 using FilmsList.Application.DTOs;
 using FilmsList.Application.Handlers;
+using FilmsList.Domain.Account;
 using FilmsList.Domain.Validation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,10 +13,14 @@ namespace FilmsList.API.Controllers
     public class MovieController : ControllerBase
     {
         private readonly IMovieService _movieService;
+        private readonly IUserProvider _userProvider;
+        private string userId;
 
-        public MovieController(IMovieService movieService)
+        public MovieController(IMovieService movieService, IUserProvider userProvider)
         {
             _movieService = movieService;
+            _userProvider = userProvider;
+            userId = _userProvider.GetUserId();
         }
 
         /// <summary>
@@ -62,7 +66,6 @@ namespace FilmsList.API.Controllers
             return Ok(movie);
         }
 
-
         /// <summary>
         /// Get all movies from your favorite list
         /// </summary>
@@ -71,7 +74,7 @@ namespace FilmsList.API.Controllers
         [Route("/api/movies")]
         public async Task<IActionResult> GetAllAdded() 
         {
-            var movies = await _movieService.GetAllAdded();
+            var movies = await _movieService.GetAllAdded(userId);
 
             if (movies == null)
                 return NotFound("Movies not found");
@@ -93,7 +96,7 @@ namespace FilmsList.API.Controllers
         [Route("/api/movies/priority/{priorityLevel}")]
         public async Task<IActionResult> GetMoviesByPriority(int priorityLevel)
         {
-            var movies = await _movieService.GetByPriority(priorityLevel);
+            var movies = await _movieService.GetByPriority(priorityLevel, userId);
 
             if (movies == null)
                 return NotFound("Movies not found");
@@ -121,7 +124,9 @@ namespace FilmsList.API.Controllers
         [HttpPost]
         public async Task<IActionResult> AddMovie([FromBody] MovieDTO movieDTO)
         {
-            var movie = await _movieService.GetMovieInListByImdbId(movieDTO.ImdbId);
+            movieDTO.UserId = userId;
+            var movie = await _movieService.GetMovieInListByImdbId(movieDTO.ImdbId, userId);
+
             if (movie != null)
                 return BadRequest("This movie already exists");            
 
@@ -144,12 +149,12 @@ namespace FilmsList.API.Controllers
         [HttpDelete("{imdbId}")]
         public async Task<IActionResult> DeleteMovieFromList(string imdbId)
         {
-            var movieDTO = await _movieService.GetMovieInListByImdbId(imdbId);
+            var movieDTO = await _movieService.GetMovieInListByImdbId(imdbId, userId);
             
             if (movieDTO == null)
                 return NotFound("Movie not found");
 
-            await _movieService.Remove(imdbId);
+            await _movieService.Remove(imdbId, userId);
 
             return Ok(movieDTO);
         }

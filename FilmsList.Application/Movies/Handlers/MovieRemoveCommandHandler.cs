@@ -16,7 +16,7 @@ namespace FilmsList.Application.Movies.Handlers
 
         public async Task<Movie> Handle(MovieRemoveCommand request, CancellationToken cancellationToken)
         {
-            var movie = await _movieRepository.GetMovieByImdbIdAsync(request.ImdbId);
+            var movie = await _movieRepository.GetMovieByImdbIdAsync(request.ImdbId, request.UserId);
             if (movie == null)
                 throw new ApplicationException($"Entity could not be found");
             else

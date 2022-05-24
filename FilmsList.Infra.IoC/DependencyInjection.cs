@@ -35,6 +35,7 @@ namespace FilmsList.Infra.IoC
             services.AddTransient<IApiMDBRepository, ApiMDBRespository>();
             services.AddTransient<IApiMDBMovies, ApiMDBMovies>();
             services.AddTransient<IMovieService, MovieService>();
+            services.AddTransient<IUserProvider, UserProvider>();
             services.AddTransient<IAuthenticate, AuthenticateService>();
 
 

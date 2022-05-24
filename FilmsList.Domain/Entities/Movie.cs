@@ -11,7 +11,8 @@ namespace FilmsList.Domain.Entities
         public string Trailer { get; private set; }
         public string Poster { get; private set; }
         public string Backdrop { get; private set; }
-        public bool Response { get; private set; } = true;
+        public string UserId { get; private set; }
+        
         public int? PriorityLevel { get; private set; } = 1;
 
         public Movie(
@@ -22,6 +23,7 @@ namespace FilmsList.Domain.Entities
             string trailer, 
             string poster, 
             string backdrop,
+            string userId,
             int? priorityLevel)
         {
             Title = title;
@@ -31,21 +33,8 @@ namespace FilmsList.Domain.Entities
             Trailer = trailer;
             Poster = poster;
             Backdrop = backdrop;
+            UserId = userId;
             PriorityLevel = priorityLevel;
-            ValidateDomain(title, description, imdbId, score, trailer, poster, backdrop, priorityLevel);
-
-
-        }
-        public void Update(
-            string title, 
-            string description, 
-            string imdbId,
-            int score, 
-            string trailer, 
-            string poster, 
-            string backdrop, 
-            int priorityLevel)
-        {
             ValidateDomain(title, description, imdbId, score, trailer, poster, backdrop, priorityLevel);
         }
 
@@ -55,7 +44,7 @@ namespace FilmsList.Domain.Entities
             {
                 ValidateDomain(Title, Description, ImdbId, Score, Trailer, Poster, Backdrop, PriorityLevel);
             } 
-            catch(DomainExceptionValidation) 
+            catch(Exception) 
             {
                 return false;
             }
@@ -72,8 +61,6 @@ namespace FilmsList.Domain.Entities
             string backdrop,
             int? priorityLevel)
         {
-            MovieNotFoundExceptionValidation.When(!Response, 
-                "Movie not found");
             DomainExceptionValidation.When(string.IsNullOrEmpty(title),
                 "Invalid title. Title is required");
             DomainExceptionValidation.When(string.IsNullOrEmpty(description),

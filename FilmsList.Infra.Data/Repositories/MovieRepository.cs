@@ -22,25 +22,27 @@ namespace FilmsList.Infra.Data
             return movie;
         }
 
-        public async Task<Movie> GetMovieByImdbIdAsync(string imdbId)
+        public async Task<Movie> GetMovieByImdbIdAsync(string imdbId, string userId)
         {
-            var movie = await _movieContext.Movies.SingleOrDefaultAsync(movie => movie.ImdbId == imdbId);
+            var movie = await _movieContext.Movies
+                .Where(m => m.UserId == userId).SingleOrDefaultAsync(movie => movie.ImdbId == imdbId);
             return movie;
         }
 
-        public async Task<IEnumerable<Movie>> GetByPriorityAsync(int priorityLevel) 
+        public async Task<IEnumerable<Movie>> GetByPriorityAsync(int priorityLevel, string userId) 
         {
             if (priorityLevel > 0 && priorityLevel < 4)
                 return await _movieContext.Movies
-                    .Where(movie => movie.PriorityLevel == priorityLevel).ToListAsync();
+                    .Where(movie => movie.PriorityLevel == priorityLevel && movie.UserId == userId)
+                    .ToListAsync();
             else
                 return await _movieContext.Movies
                     .OrderBy(movie => movie.PriorityLevel).ToListAsync();
         }
 
-        public async Task<IEnumerable<Movie>> GetMoviesAsync()
+        public async Task<IEnumerable<Movie>> GetMoviesAsync(string userId)
         {
-            return await _movieContext.Movies.ToListAsync();
+            return await _movieContext.Movies.Where(m => m.UserId == userId).ToListAsync();
         }
 
         public async Task<Movie> RemoveAsync(Movie movie)

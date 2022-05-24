@@ -24,9 +24,9 @@ namespace FilmsList.Application.Services
             await _mediator.Send(movieCreateCommand);
         }
 
-        public async Task<IEnumerable<MovieDTO>> GetAllAdded()
+        public async Task<IEnumerable<MovieDTO>> GetAllAdded(string userId)
         {
-            var moviesQuery = new GetAllMoviesAddedQuery();
+            var moviesQuery = new GetAllMoviesAddedQuery(userId);
 
             if (moviesQuery == null)
                 throw new Exception($"Entity could not be loaded");
@@ -36,9 +36,9 @@ namespace FilmsList.Application.Services
             return _mapper.Map<IEnumerable<MovieDTO>>(result);
         }
 
-        public async Task<IEnumerable<MovieDTO>> GetByPriority(int priorityLevel)
+        public async Task<IEnumerable<MovieDTO>> GetByPriority(int priorityLevel, string userId)
         {
-            var moviesByPriority = new GetMoviesByPriorityQuery(priorityLevel);
+            var moviesByPriority = new GetMoviesByPriorityQuery(priorityLevel, userId);
 
             if (moviesByPriority == null)
                 throw new Exception($"Entity could not be loaded");
@@ -59,9 +59,9 @@ namespace FilmsList.Application.Services
             return _mapper.Map<MovieApiDTO>(result);
         }
 
-        public async Task<MovieDTO> GetMovieInListByImdbId(string imdbId)
+        public async Task<MovieDTO> GetMovieInListByImdbId(string imdbId, string userId)
         {
-            var movieByIdQuery = new GetMovieInListByImdbIdQuery(imdbId);
+            var movieByIdQuery = new GetMovieInListByImdbIdQuery(imdbId, userId);
             if (movieByIdQuery == null)
                 throw new Exception($"Entity could not be loaded");
 
@@ -86,9 +86,9 @@ namespace FilmsList.Application.Services
             return _mapper.Map<IEnumerable<MovieApiDTO>>(result);
         }
 
-        public async Task Remove(string imdbId)
+        public async Task Remove(string imdbId, string userId)
         {
-            var movieRemoveCommand = new MovieRemoveCommand(imdbId);
+            var movieRemoveCommand = new MovieRemoveCommand(imdbId, userId);
 
             if (movieRemoveCommand == null)
                 throw new Exception($"Entity could not be loaded");
