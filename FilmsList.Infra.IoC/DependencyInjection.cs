@@ -9,7 +9,6 @@ using FilmsList.Infra.Data.Context;
 using FilmsList.Infra.Data.Identity;
 using FilmsList.Infra.Data.Repositories;
 using MediatR;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -37,7 +36,6 @@ namespace FilmsList.Infra.IoC
             services.AddTransient<IMovieService, MovieService>();
             services.AddTransient<IUserProvider, UserProvider>();
             services.AddTransient<IAuthenticate, AuthenticateService>();
-
 
             services.AddAutoMapper(typeof(DomainToDTOMappingProfile));
 

@@ -26,6 +26,11 @@ namespace FilmsList.API.Controllers
             _userManager = userManager;
         }
 
+        /// <summary>
+        /// Login with user
+        /// </summary>
+        /// <param name="userInfo">email and password</param>
+        /// <returns>Status 200 with JWT Token</returns>
         [HttpPost("login")]
         public async Task<ActionResult<UserToken>> Login([FromBody] LoginModel userInfo)
         {
@@ -44,6 +49,11 @@ namespace FilmsList.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Create new User
+        /// </summary>
+        /// <param name="userInfo">email, password and confirmation Password</param>
+        /// <returns>Status 200 - OK</returns>
         [HttpPost("create")]
         public async Task<ActionResult<UserToken>> CreateUser([FromBody] RegisterModel userInfo)
         {

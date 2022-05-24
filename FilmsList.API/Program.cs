@@ -1,5 +1,4 @@
 using FilmsList.Infra.IoC;
-using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Sinks.MSSqlServer;
 
@@ -15,25 +14,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddInfrastructureJWT(builder.Configuration);
 //builder.Services.AddInfrastructureInMemory(builder.Configuration);
 
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "FilmsList.API",
-        Version = "v1",
-        Contact = new OpenApiContact
-        {
-            Name = "Luis Fernando",
-            Email = "luisfernando_paganini@hotmail.com",
-            Url = new Uri("https://www.linkedin.com/in/luis-fernando-paganini-68763b1a9/")
-        }
-    });
-    var xmlFile = "FilmsList.API.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-
-    c.IncludeXmlComments(xmlPath);
-
-});
+builder.Services.AddInfrastructureSwagger();
 
 //Logs
 builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
