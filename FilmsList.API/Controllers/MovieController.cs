@@ -58,7 +58,7 @@ namespace FilmsList.API.Controllers
                     return NotFound(e.Message);
                 }
             }
-            catch(ApplicationException e)
+            catch(Exception e)
             {
                 return BadRequest(e.Message);
             }
@@ -134,7 +134,7 @@ namespace FilmsList.API.Controllers
                 await _movieService.Add(movieDTO);
                 return new CreatedAtRouteResult("GetMovieById", movieDTO, movieDTO);
             } 
-            catch (ApplicationException e) 
+            catch (Exception e) 
             {
                 return BadRequest(e.Message);
             }
