@@ -16,7 +16,7 @@ namespace FilmsList.Application.Movies.Handlers
 
         public async Task<IEnumerable<Movie>> Handle(GetAllMoviesAddedQuery request, CancellationToken cancellationToken)
         {
-            return await _movieRepository.GetMoviesAsync(request.UserId);
+            return await _movieRepository.GetMoviesAsync();
         }
     }
 }

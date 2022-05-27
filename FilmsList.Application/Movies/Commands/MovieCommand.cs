@@ -12,7 +12,6 @@ namespace FilmsList.Application.Movies.Commands
         public string Trailer { get; set; }
         public string Poster { get; set; }
         public string Backdrop { get; set; }
-        public string UserId { get; set; }
         public int PriorityLevel { get; set; }
     }
 }

@@ -37,9 +37,6 @@ namespace FilmsList.Application.Handlers
         [DisplayName("Backdrop")]
         public string Backdrop { get; set; }
 
-        [JsonIgnore]
-        public string? UserId { get; set; }
-
         [Required(ErrorMessage = "The Priority Level is required")]
         [DisplayName("Priority Level")]
         public int PriorityLevel { get; set; }

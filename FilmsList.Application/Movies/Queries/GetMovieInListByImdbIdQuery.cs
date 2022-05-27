@@ -6,14 +6,10 @@ namespace FilmsList.Application.Movies.Queries
     public class GetMovieInListByImdbIdQuery : IRequest<Movie>
     {
         public string ImdbId { get; set; }
-        public string UserId { get; set; }
 
-
-
-        public GetMovieInListByImdbIdQuery(string imdbId, string userId)
+        public GetMovieInListByImdbIdQuery(string imdbId)
         {
             ImdbId = imdbId;
-            UserId = userId;
         }
     }
 }

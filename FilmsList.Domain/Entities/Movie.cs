@@ -11,8 +11,6 @@ namespace FilmsList.Domain.Entities
         public string Trailer { get; private set; }
         public string Poster { get; private set; }
         public string Backdrop { get; private set; }
-        public string UserId { get; private set; }
-        
         public int? PriorityLevel { get; private set; } = 1;
 
         public Movie(
@@ -23,7 +21,6 @@ namespace FilmsList.Domain.Entities
             string trailer, 
             string poster, 
             string backdrop,
-            string userId,
             int? priorityLevel)
         {
             Title = title;
@@ -33,7 +30,6 @@ namespace FilmsList.Domain.Entities
             Trailer = trailer;
             Poster = poster;
             Backdrop = backdrop;
-            UserId = userId;
             PriorityLevel = priorityLevel;
             ValidateDomain(title, description, imdbId, score, trailer, poster, backdrop, priorityLevel);
         }

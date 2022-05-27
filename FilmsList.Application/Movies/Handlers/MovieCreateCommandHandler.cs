@@ -24,7 +24,6 @@ namespace FilmsList.Application.Movies.Handlers
                 request.Trailer,
                 request.Poster,
                 request.Backdrop,
-                request.UserId,
                 request.PriorityLevel);
 
             if (movie == null)
